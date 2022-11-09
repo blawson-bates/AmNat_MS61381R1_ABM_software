@@ -51,7 +51,7 @@ Python libraries: bisect, numpy, progress, pandas
 
 - `rng_mt19937.py`
 
-  > - `RNG` class that implements a wrapper around numpy's MT19937 (Mersenne twister) generator to allow for a "multiple-streams" implementation, i.e., where we can have a different stream of random numbers for each different stochastic component in the model.  
+  > - `RNG` class that implements a wrapper around numpy's MT19937 (Mersenne twister) generator to allow for a "multiple-streams" implementation, i.e., providing a different stream of random numbers for each different stochastic component in the model.  
         
 - `simulation.py`
 
