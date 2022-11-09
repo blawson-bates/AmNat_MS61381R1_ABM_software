@@ -1,4 +1,4 @@
-# AmNat_Hill_ABM
+# AmNat_MS61381R1_ABM
 
 Agent-Based Model software (Python) for AmNat MS 61381R1
 
