@@ -1,5 +1,5 @@
-import bisect # http://pymotw.com/2/bisect/index.html
 from enum import Enum
+from heapq import heappush, heappop
 
 ################################################################################
 class EventType(Enum):
@@ -22,7 +22,10 @@ class Event:
         in the simulation model.  An event is determined by its time, the type
         of event, and the corresponding symbiont driving the event.
     '''
-    __slots__ = ('_time', '_type', '_symbiont')
+    __slots__ = ('_time', '_type', '_symbiont', '_event_num')
+
+    # class-level variable to track the number of total eventds
+    _event_cnt : int = 0
 
     #####################################
     def __init__(self, time: float, event_type: EventType, symbiont: 'Symbiont') -> None:
@@ -35,20 +38,21 @@ class Event:
         self._time     : float      = time
         self._type     : EventType  = event_type
         self._symbiont : 'Symbiont' = symbiont
+        self._event_num: int        = Event._event_cnt
+
+        Event._event_cnt += 1
 
     #####################################
-    # for using bisect in event list so events are oderable: 
-    # http://python3porting.com/problems.html
     def __lt__(self, other: 'Event') -> bool:
-        ''' method to compare this event to another, allowing bisect to work
-            properly on list of events
+        ''' method to compare this event to another
         Parameters:
             other: an Event object to compare to
         Returns:
             True if this event should appear before the other event, False o/w
         '''
-        # sort first on event time, then on event type
-        return (self._time,self._type) < (other._time,other._type)
+        # sort first on event time, then on event type, then on event number (JIC)
+        return (self._time,self._type,self._event_num) \
+            < (other._time,other._type,other._event_num)
 
     #####################################
     ''' simple getter/accessor methods '''
@@ -64,25 +68,25 @@ class Event:
 ###############################################################################
 class EventList:
     ''' class to implement an event list for the simulation model, using a
-        Python list to store events in time-sequenced order, using bisect.insort
-        to reasonably and efficiently insert events
+        Python list initially, but converted to a priority queue using
+        heapq.heappush and heapq.heappop, to store events in time-sequenced
+        order to reasonably and efficiently insert events
     '''
-
-    __slots__ = ('_list')
+    __slots__ = ('_heap')
 
     ###########################
     def __init__(self) -> None:
-        ''' initializer, creating an empty event list '''
-        self._list = []
+        ''' initializer, creating an empty event list (for heap) '''
+        self._heap = []
 
     ################################
-    def getNextEvent(self) -> 'Event':
+    def getNextEvent(self) -> 'Event or None':
         ''' returns the next event to occur in simulated time
         Returns:
             an Event object corresponding to the next event to occur
         '''
         event = None
-        if len(self._list) > 0: event = self._list.pop(0)
+        if len(self._heap) > 0: event = heappop(self._heap)
         return event   # empty list returns None
 
     ############################################
@@ -92,9 +96,7 @@ class EventList:
             event: an Event object (w/ info time, event type, associated symbiont)
         '''
         assert(event != None)
-        # uses __lt__() defined in event.py;
-        # note that ties of same time & type will have newest in rightmost position
-        bisect.insort(self._list, event) 
+        heappush(self._heap, event)
 
     #########################
     def __len__(self) -> int:
@@ -102,4 +104,4 @@ class EventList:
         Returns:
             the integer valued number of events in the event list
         '''
-        return len(self._list)
+        return len(self._heap)
