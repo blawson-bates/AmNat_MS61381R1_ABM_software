@@ -256,7 +256,7 @@ class RNG:
         if phenotypic_mutation_prob < clade.getPhenotypicMutationProb():
             # then a mutation occurs... of those most will be deleterious
             deleterious_prob = cls.random(which_stream)
-            if deleterious_prob < clade.getDeleteriousProv():
+            if deleterious_prob < clade.getDeleteriousProb():
                 # mutation will be a deleterious one: Gamma(2,1/0.83915) will give
                 # 75% of value 1.5 or less -- use the generated value z as the
                 # pct of the value v to change (e.g., v + v*(z/100));
