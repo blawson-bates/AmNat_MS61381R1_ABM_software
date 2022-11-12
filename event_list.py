@@ -67,10 +67,11 @@ class Event:
 
 ###############################################################################
 class EventList:
-    ''' class to implement an event list for the simulation model, using a
+    ''' Class to implement an event list for the simulation model, using a
         Python list initially, but converted to a priority queue using
-        heapq.heappush and heapq.heappop, to store events in time-sequenced
-        order to reasonably and efficiently insert events
+        heapq.heappush and heapq.heappop.  This facilitates efficient insertion
+        and removal of time-sequenced events as part of the event calendar 
+        (event list).
     '''
     __slots__ = ('_heap')
 
