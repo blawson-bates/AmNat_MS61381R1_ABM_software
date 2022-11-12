@@ -5,7 +5,7 @@ Agent-Based Model software (Python) for AmNat MS 61381R1
 ## Software requirements:
 
 Python >= 3.9<br>
-Python libraries: bisect, numpy, progress, pandas  
+Python libraries: heapq, numpy, progress, pandas  
 
 ## Running the simulation model:
 
