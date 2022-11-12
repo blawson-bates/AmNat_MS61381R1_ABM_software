@@ -32,7 +32,7 @@ Python libraries: bisect, numpy, progress, pandas
 - `event_list.py`
 
   > - `Event` class to implement an event (to be stored in the corresponding event list) in the simulation model.  An event is determined by its time, the type of event, and the corresponding algal symbiont driving the event.
-  > - `EventList` class to implement an event list for the simulation model, storing future events in time-sequenced order.
+  > - `EventList` class to implement an event list for the simulation model, storing future events in time-sequenced order.  This uses Python's heapq.heappush and heapq.heappop to efficiently maintain a priority queue of events.
 
 - `input.csv`
 
