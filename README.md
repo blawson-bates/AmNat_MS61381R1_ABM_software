@@ -1,6 +1,6 @@
-# AmNat_MS61381R1_ABM
+# Frontiers_E&E_1221012_ABM
 
-Agent-Based Model software (Python) for AmNat MS 61381R1
+Agent-Based Model software (Python) for Frontiers Ecology & Evolution 1221012
 
 ## Software requirements:
 
