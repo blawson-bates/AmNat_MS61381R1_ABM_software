@@ -27,10 +27,7 @@ class Parameters:
     WRITE_LOGGING_INFO:        bool        = False
     LOG_FILENAME:              str         = ""
 
-    NUM_ARRIVAL_STRATEGIES:    int         = 0
-    ARRIVAL_STRATEGY_PROBS:    list[float] = []
-    NUM_DIVISION_STRATEGIES:   int         = 0
-    DIVISION_STRATEGY_PROBS:   list[float] = []
+    PRINT_PARAMETER_VALUES:    bool        = False
 
     @classmethod
     def printParameters(cls) -> None:
@@ -49,7 +46,3 @@ class Parameters:
         print(f"POPULATION_FILENAME:       {cls.POPULATION_FILENAME}")
         print(f"WRITE_LOGGING_INFO:        {cls.WRITE_LOGGING_INFO}")
         print(f"LOG_FILENAME:              {cls.LOG_FILENAME}")
-        print(f"NUM_ARRIVAL_STRATEGIES:    {cls.NUM_ARRIVAL_STRATEGIES}")
-        print(f"ARRIVAL_STRATEGY_PROBS:    {cls.ARRIVAL_STRATEGY_PROBS}")
-        print(f"NUM_DIVISION_STRATEGIES:   {cls.NUM_DIVISION_STRATEGIES}")
-        print(f"DIVISION_STRATEGY_PROBS:   {cls.DIVISION_STRATEGY_PROBS}")

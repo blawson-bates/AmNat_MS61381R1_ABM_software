@@ -70,6 +70,8 @@ class Parser:
                         value = repr(value)  # repr includes quotes for str
                     else:
                         # str like "(0.5,0.5)" will be eval'd to tuple
+                        if value.lower() == "true":  value = "True"
+                        if value.lower() == "false": value = "False"
                         value = eval(str(value))
 
             if parameter_name in sim_params_list:
@@ -93,9 +95,8 @@ class Parser:
         assert(clade is not None)
         Clade.addClade(clade)
 
-        ## uncomment below if want to see parameter values read
-        '''
-        Parameters.printParameters()
-        for clade in Clade.clade_objects:
-            print(clade)
-        '''
+        ## check whether user want to see all parameter values 
+        if Parameters.PRINT_PARAMETER_VALUES:
+            Parameters.printParameters()
+            for clade in Clade.clade_objects:
+                print(clade)

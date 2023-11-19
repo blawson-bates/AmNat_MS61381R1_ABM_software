@@ -80,7 +80,7 @@ class EventList:
         ''' initializer, creating an empty event list (for heap) '''
         self._heap = []
 
-    ################################
+    ##########################################
     def getNextEvent(self) -> 'Event or None':
         ''' returns the next event to occur in simulated time
         Returns:
@@ -90,7 +90,7 @@ class EventList:
         if len(self._heap) > 0: event = heappop(self._heap)
         return event   # empty list returns None
 
-    ############################################
+    ##############################################
     def insertEvent(self, event: 'Event') -> None:
         ''' inserts a new event in order of event time into the event list
         Parameters:

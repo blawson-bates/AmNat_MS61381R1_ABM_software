@@ -1,7 +1,7 @@
 import numpy.typing
 from enum import Enum
 from numpy.random import MT19937, Generator
-from parameters import Parameters
+from parameters import *
 
 #############################################################################
 class Stream(Enum):
@@ -105,26 +105,30 @@ class RNG:
         if not cls._initialized: cls.initializeStreams()
         value = cls._streams[which_stream.value].random()
         if exclude_zero:
-            while value == 0:  cls._streams[which_stream.value].random()
+            while value == 0:  
+                value = cls._streams[which_stream.value].random()
         return value
     
     ############################################################################
     @classmethod
     def uniform(cls, a: float, b: float, which_stream: Stream, exclude_a: bool = False) -> numpy.float64:
         ''' class-level method to generate floating-point values uniformly
-            in [a,b), or in (b,b) if exclude_a is True
+            in [a,b), or in (a,b) if exclude_a is True
         Parameters:
+            a: floating-point minimum value of the distribution
+            b: floating-point maximum value of the distribution
             which_stream: named entry from Stream class
             exclude_a: if True, allows numpy's uniform(a,b) to return a (default)
         Returns:
-            a uniformly generated floating point value in either [0,1) or (0,1)
+            a uniformly generated floating point value in either [a,b) or (a,b)
         '''
         if not isinstance(which_stream, Stream):
             raise TypeError(f"in RNG.uniform, which_stream must be of type Stream, not {type(which_stream)}")
         if not cls._initialized: cls.initializeStreams()
         value = cls._streams[which_stream.value].uniform(a,b)
         if exclude_a:
-            while value == a:  cls._streams[which_stream.value].uniform(a,b)
+            while value == a:
+                value = cls._streams[which_stream.value].uniform(a,b)
         return value
     
     ############################################################################

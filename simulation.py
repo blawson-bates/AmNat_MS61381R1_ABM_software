@@ -2,12 +2,14 @@ import logging
 import pdb
 from progress.bar import Bar  # https://pypi.python.org/pypi/progress
 import sys # for command-line args
+import os.path
 
 # now call the parser to parse the file
 from parser import Parser
 from rng_mt19937 import *
 from parameters import *
 
+from cell import Cell
 from event_list import EventList
 from sponge import Sponge
 from symbiont import *
@@ -21,9 +23,7 @@ class Placement(Enum):
 
 ################################################################################
 class Simulation:
-    ''' class to implement initialization of the agent-based simulation model
-        and containing the event-driven loop driving the simulation
-    '''
+    ''' class to implement the guts of the agent-based simulation model '''
 
     # class-level variables
     _current_time                 : float               = None
@@ -45,9 +45,10 @@ class Simulation:
 
     ########################
     @classmethod
-    def usage(cls) -> None:
+    def usage(cls, msg: str = None) -> None:
         ''' method to print usage and exit '''
-        print(f"python {sys.argv[0]} [input CSV filename] [show progress (default: True)]")
+        if msg is not None: print(f"ERROR: {msg}")
+        print(f"python {sys.argv[0]} [input CSV filename (default: 'input.csv')] [show progress (default: True)]")
         sys.exit(1)
 
     ##################################
@@ -84,10 +85,20 @@ class Simulation:
     def run(cls) -> None:
         ''' class-level method to implement the main simulation code / loop '''
 
+        # look for -h or --help or similar
+        try:    need_help = "-h" in sys.argv[1]
+        except: pass
+        else:
+            if need_help: cls.usage()
+
         try:    cls._input_csv_fname = sys.argv[1]
-        except: cls.usage()
+        except: cls._input_csv_fname = "input.csv"
+        if not os.path.exists(cls._input_csv_fname):
+            cls.usage(f"file not found: {cls._input_csv_fname}")
     
-        try:    cls._show_progress = eval(sys.argv[2])  # eval("False") works...
+        # use .capitalize then eval then bool, which will work for any of 
+        #   ["True", "False", "true", "false", "TRUE", "FALSE", "1", "0"]
+        try:    cls._show_progress = bool(eval(sys.argv[2].capitalize()))
         except: cls._show_progress = True
     
         ################################################################
@@ -170,7 +181,7 @@ class Simulation:
                 col_end   = Parameters.NUM_COLS
                 open_cell = Symbiont.findOpenCellWithin(row_start, row_end, col_start, col_end)
             ####
-            else:
+            else: # Placement.VERTICAL
                 # place this clade at random within the appropriate
                 # vertical slice of the host
                 row_start = 0

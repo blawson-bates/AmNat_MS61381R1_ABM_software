@@ -44,6 +44,12 @@
 #        clade_objects                   : a list containing all clade objects, set at runtime
 ###############################################################################
 
+import random
+import logging
+import copy
+
+#from parameters import *
+
 class Clade:
     ''' class to implement/store clade-level specific values, i.e., values that
         all symbionts of a particular clade will have

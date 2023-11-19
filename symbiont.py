@@ -1,12 +1,13 @@
-#import logging
+import logging
 import copy  # for copy constructor:
     # http://stackoverflow.com/questions/1241148/copy-constructor-in-python
     # http://pymotw.com/2/copy/
+from numpy import cumsum
 from parameters import *
 from rng_mt19937 import *
 from event_list import Event, EventType
 from clade import *
-from sponge import Cell
+from cell import *
 
 ###############################################################################
 # This class implements a symbiont alga in the agent-based simulation.
@@ -108,8 +109,6 @@ class SymbiontState(Enum):
 
 ################################################################################
 class Symbiont:
-    ''' class to implement an algal symbiont in the agent-based simulation '''
-
     # the __slots__ tuple defines the names of the instance variables for a 
     # Symbiont object so that, e.g.,  mistyping a name doesn't accidentally
     # introduce a new instance variable (a Python "feature" if using the 
@@ -173,7 +172,7 @@ class Symbiont:
         if Symbiont.sponge is None:
             raise RuntimeError(f"Error in Symbiont: class-level sponge environment not set")
         if clade_number < 0 or clade_number >= Parameters.NUM_CLADES:
-            raise ValueError(f"Error in Symbiont: invalid clade {clade_num}")
+            raise ValueError(f"Error in Symbiont: invalid clade {clade_number}")
 
         ########################################################################
         # define instance variables and type (hints) so they are in one place
@@ -561,7 +560,7 @@ class Symbiont:
         # (_computeSurplusAtEventEnd uses state when determining digestion or exit)
         [surplus_at_end, time_of_digestion, time_of_exit] = \
             self._computeSurplusAtEventEnd(self._prev_event_time, current_time, \
-                                          state = None)
+                                          state = SymbiontState.IN_G0)
 
         assert(time_of_digestion == None) # sanity check -- should not have a value
         assert(time_of_exit == None)      # sanity check -- should not have a value
@@ -642,7 +641,7 @@ class Symbiont:
         #
         [surplus_at_end, time_of_digestion, time_of_exit] = \
             self._computeSurplusAtEventEnd(self._prev_event_time, current_time, \
-                                          state = None)
+                                          state = SymbiontState.IN_G1SG2M)
     
         assert(time_of_digestion == None) # should not get here otherwise...
         assert(time_of_exit == None)      # should not get here otherwise...
@@ -1207,14 +1206,9 @@ class Symbiont:
             probabilities of arriving -- used when generating a symbiont
             arrival
         '''
-        cls.clade_cumulative_proportions = [0] * len(Parameters.CLADE_PROPORTIONS)
-        cls.clade_cumulative_proportions[0] = Parameters.CLADE_PROPORTIONS[0]
-        for i in range(1, Parameters.NUM_CLADES):
-            cls.clade_cumulative_proportions[i] = \
-                cls.clade_cumulative_proportions[i-1] \
-                + Parameters.CLADE_PROPORTIONS[i]
+        cls.clade_cumulative_proportions = numpy.cumsum(Parameters.CLADE_PROPORTIONS)
         # set last entry to 1.0 just to be safe (avoid roundoff errors)
-        cls.clade_cumulative_proportions[Parameters.NUM_CLADES-1] = 1.0
+        cls.clade_cumulative_proportions[-1] = 1.0
 
     @classmethod
     def openCSVFile(cls, csv_fname: str) -> None:
