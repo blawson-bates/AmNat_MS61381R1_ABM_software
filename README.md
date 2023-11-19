@@ -1,4 +1,4 @@
-# Frontiers_E&E_1221012_ABM
+# Frontiers in Ecology & Evolution #1221012: ABM software (Python)
 
 Agent-Based Model software (Python) for Frontiers in Ecology & Evolution #1221012
 
