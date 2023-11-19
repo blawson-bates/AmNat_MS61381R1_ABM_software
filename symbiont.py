@@ -7,7 +7,7 @@ from parameters import *
 from rng_mt19937 import *
 from event_list import Event, EventType
 from clade import *
-from cell import *
+from sponge import Cell
 
 ###############################################################################
 # This class implements a symbiont alga in the agent-based simulation.
@@ -109,6 +109,8 @@ class SymbiontState(Enum):
 
 ################################################################################
 class Symbiont:
+    ''' class to implement an algal symbiont in the agent-based simulation '''
+
     # the __slots__ tuple defines the names of the instance variables for a 
     # Symbiont object so that, e.g.,  mistyping a name doesn't accidentally
     # introduce a new instance variable (a Python "feature" if using the 
@@ -556,7 +558,7 @@ class Symbiont:
 
         # first, compute the photosynthate surplus since last event (the last
         # event will have been an end-of-G1/S/G2/M); 
-        # computed surplus should never be negative here so pass None as state
+        # computed surplus should never be negative here
         # (_computeSurplusAtEventEnd uses state when determining digestion or exit)
         [surplus_at_end, time_of_digestion, time_of_exit] = \
             self._computeSurplusAtEventEnd(self._prev_event_time, current_time, \
@@ -632,7 +634,7 @@ class Symbiont:
         # remember that, to save computation, we could have already computed the 
         # photosynthate surplus to this point (see comment above), but it makes
         # debugging easier if this is here;
-        # computed surplus should never be negative here so pass None as state
+        # computed surplus should never be negative here
         # (_computeSurplusAtEventEnd uses state when determining digestion or exit);
         #
         # also note that in endOfG0(), we precomputed what the additional cost of

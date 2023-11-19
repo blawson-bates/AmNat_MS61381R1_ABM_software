@@ -9,7 +9,6 @@ from parser import Parser
 from rng_mt19937 import *
 from parameters import *
 
-from cell import Cell
 from event_list import EventList
 from sponge import Sponge
 from symbiont import *
@@ -23,7 +22,9 @@ class Placement(Enum):
 
 ################################################################################
 class Simulation:
-    ''' class to implement the guts of the agent-based simulation model '''
+    ''' class to implement initialization of the agent-based simulation model
+        and containing the event-driven loop driving the simulation
+    '''
 
     # class-level variables
     _current_time                 : float               = None
@@ -156,7 +157,9 @@ class Simulation:
             cls._event_list.insertEvent(event)
     
         num_initial_agents : int = Parameters.NUM_INITIAL_SYMBIONTS
-        initial_placement  : Placement = eval(f"Placement.{Parameters.INITIAL_PLACEMENT.upper()}")
+        if Parameters.INITIAL_PLACEMENT.lower() == "random":
+            Parameters.INITIAL_PLACEMENT = "randomize"
+        initial_placement : Placement = eval(f"Placement.{Parameters.INITIAL_PLACEMENT.upper()}")
     
         cls._current_time : float = 0.0
 

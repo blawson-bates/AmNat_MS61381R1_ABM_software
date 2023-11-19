@@ -33,16 +33,7 @@ class Parameters:
     def printParameters(cls) -> None:
         ''' class-level method to print out values of simulation-level
             parameters '''
-        print(f"INITIAL_SEED:              {cls.INITIAL_SEED}")
-        print(f"MAX_SIMULATED_TIME:        {cls.MAX_SIMULATED_TIME}")
-        print(f"NUM_ROWS:                  {cls.NUM_ROWS}")
-        print(f"NUM_COLS:                  {cls.NUM_COLS}")
-        print(f"HOST_CELL_DEMAND:          {cls.HOST_CELL_DEMAND}")
-        print(f"HCD_FUZZ:                  {cls.HCD_FUZZ}")
-        print(f"AVG_TIME_BETWEEN_ARRIVALS: {cls.AVG_TIME_BETWEEN_ARRIVALS}")
-        print(f"NUM_CLADES:                {cls.NUM_CLADES}")
-        print(f"CLADE_PROPORTIONS:         {cls.CLADE_PROPORTIONS}")
-        print(f"CSV_FILENAME:              {cls.CSV_FILENAME}")
-        print(f"POPULATION_FILENAME:       {cls.POPULATION_FILENAME}")
-        print(f"WRITE_LOGGING_INFO:        {cls.WRITE_LOGGING_INFO}")
-        print(f"LOG_FILENAME:              {cls.LOG_FILENAME}")
+        for var in dir(cls):
+            if not var.startswith('__') and not callable(getattr(cls, var)):
+                value = eval(f"cls.{var}")
+                print(f"{var:<30}: {value}")
